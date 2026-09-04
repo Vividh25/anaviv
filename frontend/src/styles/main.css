@@ -1,0 +1,25 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b0b12;
+  --fg: #f2f2f7;
+  --accent: #ff5c8a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+#app {
+  min-height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+}
