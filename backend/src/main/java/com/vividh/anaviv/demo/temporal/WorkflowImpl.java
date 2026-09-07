@@ -1,12 +1,17 @@
 package com.vividh.anaviv.demo.temporal;
 
+import com.vividh.anaviv.demo.enums.Resolution;
+import com.vividh.anaviv.demo.record.TranscodeResult;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.workflow.Async;
 import io.temporal.workflow.Promise;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class WorkflowImpl implements Workflow {
@@ -23,12 +28,21 @@ public class WorkflowImpl implements Workflow {
     public void workflowMethod(String videoId, String videoFilePath) {
         activities.activitiesMethod1(videoId, videoFilePath);
 
-        Promise<Void> am2Promise = Async.procedure(activities::activitiesMethod2);
-        Promise<Void> am3Promise = Async.procedure(activities::activitiesMethod3);
-        Promise<Void> am4Promise = Async.procedure(activities::activitiesMethod4);
+        List<Promise<TranscodeResult>> transcodePromises = new ArrayList<>();
 
-        am2Promise.get();
-        am3Promise.get();
-        am4Promise.get();
+        for (Resolution resolution : Resolution.values()) {
+            Promise<TranscodeResult> promise = Async.function(activities::transcode, videoId, videoFilePath, resolution);
+            transcodePromises.add(promise);
+        }
+
+        List<TranscodeResult> results = transcodePromises.stream()
+                .map(Promise::get)
+                .toList();
+
+        List<Promise<Void>> segmentPromises = results.stream()
+                        .map(result -> Async.procedure(activities::segment, result))
+                        .toList();
+
+        segmentPromises.forEach(Promise::get);
     }
 }

@@ -1,7 +1,11 @@
 package com.vividh.anaviv.demo.temporal;
 
+import com.vividh.anaviv.demo.enums.Resolution;
+import com.vividh.anaviv.demo.record.TranscodeResult;
 import io.temporal.activity.ActivityInterface;
 import io.temporal.activity.ActivityMethod;
+
+import java.io.IOException;
 
 @ActivityInterface
 public interface Activities {
@@ -10,11 +14,8 @@ public interface Activities {
     void activitiesMethod1(String videoId, String videoFilePath);
 
     @ActivityMethod
-    void activitiesMethod2();
+    TranscodeResult transcode(String videoId, String inputPath, Resolution resolution);
 
     @ActivityMethod
-    void activitiesMethod3();
-
-    @ActivityMethod
-    void activitiesMethod4();
+    void segment(TranscodeResult transcodeResult);
 }
