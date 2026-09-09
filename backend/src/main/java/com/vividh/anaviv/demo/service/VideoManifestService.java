@@ -1,13 +1,11 @@
 package com.vividh.anaviv.demo.service;
 
 import com.vividh.anaviv.demo.enums.Resolution;
-import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 
 @Service
 public class VideoManifestService {
@@ -24,7 +22,7 @@ public class VideoManifestService {
             sb.append("#EXT-X-VERSION:3\n");
 
             for (Resolution resolution : Resolution.values()) {
-                sb.append("#EXT-X-STREAM-INF:BANDWIDTH=%d,RESOLUTION=%dx%d\\n".formatted(resolution.bandwidth, resolution.width, resolution.height));
+                sb.append("#EXT-X-STREAM-INF:BANDWIDTH=%d,RESOLUTION=%dx%d\n".formatted(resolution.bandwidth, resolution.width, resolution.height));
                 sb.append("%s/manifest.m3u8\n".formatted(resolution));
             }
 
