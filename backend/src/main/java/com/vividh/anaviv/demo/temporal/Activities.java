@@ -18,4 +18,13 @@ public interface Activities {
 
     @ActivityMethod
     void segment(TranscodeResult transcodeResult);
+
+    @ActivityMethod
+    void getMasterManifest(String videoId);
+
+    @ActivityMethod
+    void generateThumbnail(String videoId, String videoFilePath);
+
+    @ActivityMethod
+    void markVideoReady(String videoId);
 }

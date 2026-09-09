@@ -26,6 +26,7 @@ public class WorkflowImpl implements Workflow {
     @SneakyThrows
     @Override
     public void workflowMethod(String videoId, String videoFilePath) {
+        Promise<Void> thumbnailPromise = Async.procedure(activities::generateThumbnail, videoId, videoFilePath);
         activities.activitiesMethod1(videoId, videoFilePath);
 
         List<Promise<TranscodeResult>> transcodePromises = new ArrayList<>();
@@ -44,5 +45,10 @@ public class WorkflowImpl implements Workflow {
                         .toList();
 
         segmentPromises.forEach(Promise::get);
+
+        thumbnailPromise.get();
+        activities.getMasterManifest(videoId);
+
+        activities.markVideoReady(videoId);
     }
 }
